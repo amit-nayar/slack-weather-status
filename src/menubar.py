@@ -13,7 +13,8 @@ from main import (
     LOCATION_CITY, LOCATION_COUNTRY, UNITS,
 )
 
-CRON_COMMAND = "source ~/.zprofile && /Users/amit/dev/me/slack-weather-status/.venv/bin/python /Users/amit/dev/me/slack-weather-status/src/main.py >> /tmp/slack-weather-status.log 2>&1"
+PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+CRON_COMMAND = f"source ~/.zprofile && {PROJECT_DIR}/.venv/bin/python {PROJECT_DIR}/src/main.py >> /tmp/slack-weather-status.log 2>&1"
 CRON_SCHEDULE = "0 */4 * * *"
 CRON_LINE = f"{CRON_SCHEDULE} {CRON_COMMAND}"
 
