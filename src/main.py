@@ -82,8 +82,8 @@ def set_slack_status(token, text, emoji):
         "Authorization": f"Bearer {token}",
         "Content-Type": "application/json; charset=utf-8"
     }
-    # Status expires after 4 hours
-    expiration = datetime.now() + timedelta(hours=4)
+    # Status expires after 2 hours
+    expiration = datetime.now() + timedelta(hours=2)
     expiration_timestamp = int(expiration.timestamp())
 
     payload = {

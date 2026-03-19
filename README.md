@@ -57,7 +57,7 @@ The menu bar icon shows the current state:
 
 | Icon | State | Description |
 |------|-------|-------------|
-| ☀️ | Running | Cron active, status updates every 4 hours |
+| ☀️ | Running | Cron active, status updates every 2 hours |
 | ⏸ | Paused | Cron disabled, current status stays |
 | ⏹ | Stopped | Cron disabled, status cleared |
 

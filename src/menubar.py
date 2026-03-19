@@ -15,7 +15,7 @@ from main import (
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CRON_COMMAND = f"source ~/.zprofile && {PROJECT_DIR}/.venv/bin/python {PROJECT_DIR}/src/main.py >> /tmp/slack-weather-status.log 2>&1"
-CRON_SCHEDULE = "0 */4 * * *"
+CRON_SCHEDULE = "0 */2 * * *"
 CRON_LINE = f"{CRON_SCHEDULE} {CRON_COMMAND}"
 
 
