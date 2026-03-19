@@ -51,6 +51,30 @@ def get_status_emoji(weather_data):
     else:
         return ":sun_behind_cloud:"
 
+WEATHER_EMOJIS = {
+    ":thunder_cloud_and_rain:", ":drizzle:", ":rain_cloud:", ":snowflake:",
+    ":fog:", ":sunny:", ":cloud:", ":sun_behind_cloud:", ":question:"
+}
+
+def get_current_slack_status(token):
+    """Gets the user's current Slack status."""
+    url = "https://slack.com/api/users.profile.get"
+    headers = {"Authorization": f"Bearer {token}"}
+    try:
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()
+        result = response.json()
+        if result.get("ok"):
+            profile = result["profile"]
+            return profile.get("status_emoji", ""), profile.get("status_text", "")
+    except requests.exceptions.RequestException as e:
+        print(f"Error getting Slack status: {e}")
+    return "", ""
+
+def is_weather_status(emoji):
+    """Returns True if the current status was set by this script."""
+    return emoji == "" or emoji in WEATHER_EMOJIS
+
 def set_slack_status(token, text, emoji):
     """Sets the user's status in Slack."""
     url = "https://slack.com/api/users.profile.set"
@@ -58,9 +82,9 @@ def set_slack_status(token, text, emoji):
         "Authorization": f"Bearer {token}",
         "Content-Type": "application/json; charset=utf-8"
     }
-    # Status expires at the end of the day
-    end_of_day = datetime.now().replace(hour=23, minute=59, second=59)
-    expiration_timestamp = int(end_of_day.timestamp())
+    # Status expires after 4 hours
+    expiration = datetime.now() + timedelta(hours=4)
+    expiration_timestamp = int(expiration.timestamp())
 
     payload = {
         "profile": {
@@ -82,14 +106,15 @@ def set_slack_status(token, text, emoji):
 
 
 if __name__ == "__main__":
-    weather = get_weather(OPENWEATHER_API_KEY, LOCATION_CITY, LOCATION_COUNTRY, UNITS)
-    
-    if weather:
-        temp = round(weather['main']['temp'])
-        description = weather['weather'][0]['description']
-        
-        status_text = f"{temp}°C & {description.capitalize()} in {LOCATION_CITY}"
-        status_emoji = get_status_emoji(weather)
-        
-        print(f"Setting status to: {status_emoji} {status_text}")
-        set_slack_status(SLACK_OAUTH_TOKEN, status_text, status_emoji)
+    current_emoji, current_text = get_current_slack_status(SLACK_OAUTH_TOKEN)
+    if not is_weather_status(current_emoji):
+        print(f"Non-weather status already set: {current_emoji} {current_text} — skipping.")
+    else:
+        weather = get_weather(OPENWEATHER_API_KEY, LOCATION_CITY, LOCATION_COUNTRY, UNITS)
+        if weather:
+            temp = round(weather['main']['temp'])
+            description = weather['weather'][0]['description']
+            status_text = f"{temp}°C & {description.capitalize()} in {LOCATION_CITY}"
+            status_emoji = get_status_emoji(weather)
+            print(f"Setting status to: {status_emoji} {status_text}")
+            set_slack_status(SLACK_OAUTH_TOKEN, status_text, status_emoji)
