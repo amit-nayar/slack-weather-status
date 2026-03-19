@@ -1,10 +1,24 @@
+<p align="center">
+  <img src="repo-icon.png" width="128" alt="slack-weather-status">
+</p>
+
 # slack-weather-status
 
-Sets your Slack profile status to the current weather in your area (emoji + temperature + conditions).
+Sets your Slack profile status to the current weather in your area (emoji + temperature + conditions). Runs on a schedule via cron and includes a macOS menu bar app to control it.
+
+![Example](screenshot.png)
+
+## How it works
+
+- Fetches current weather from OpenWeatherMap
+- Maps conditions to Slack emojis (sun, rain, snow, fog, clouds, etc.)
+- Sets your Slack status, e.g. `:sunny: 15°C & Clear sky in Stuttgart`
+- Status auto-expires after 4 hours
+- If you've manually set a non-weather status, it won't overwrite it
 
 ## Setup
 
-1. Create a [Slack app](https://api.slack.com/apps) with the `users.profile:write` user token scope
+1. Create a [Slack app](https://api.slack.com/apps) with the `users.profile:write` and `users.profile:read` user token scopes
 2. Get a free API key from [OpenWeatherMap](https://openweathermap.org/api)
 3. Add both to your shell profile (e.g. `~/.zprofile`):
 
@@ -23,9 +37,32 @@ pip install -r requirements.txt
 
 ## Usage
 
+Run once manually:
+
 ```bash
-source .venv/bin/activate
-python main.py
+.venv/bin/python main.py
 ```
+
+### Menu bar app
+
+Launch the macOS menu bar app for easy control:
+
+```bash
+.venv/bin/python menubar.py
+```
+
+![Menu bar demo](demo.gif)
+
+The menu bar icon shows the current state:
+
+| Icon | State | Description |
+|------|-------|-------------|
+| ☀️ | Running | Cron active, status updates every 4 hours |
+| ⏸ | Paused | Cron disabled, current status stays |
+| ⏹ | Stopped | Cron disabled, status cleared |
+
+The menu bar app starts automatically at login via a LaunchAgent.
+
+## Configuration
 
 Edit `LOCATION_CITY` and `LOCATION_COUNTRY` in `main.py` to change the location.
