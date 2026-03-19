@@ -1,12 +1,12 @@
 <p align="center">
-  <img src="repo-icon.png" width="128" alt="slack-weather-status">
+  <img src="assets/repo-icon.png" width="128" alt="slack-weather-status">
 </p>
 
 # slack-weather-status
 
 Sets your Slack profile status to the current weather in your area (emoji + temperature + conditions). Runs on a schedule via cron and includes a macOS menu bar app to control it.
 
-![Example](screenshot.png)
+![Example](assets/screenshot.png)
 
 ## How it works
 
@@ -40,7 +40,7 @@ pip install -r requirements.txt
 Run once manually:
 
 ```bash
-.venv/bin/python main.py
+.venv/bin/python src/main.py
 ```
 
 ### Menu bar app
@@ -48,10 +48,10 @@ Run once manually:
 Launch the macOS menu bar app for easy control:
 
 ```bash
-.venv/bin/python menubar.py
+.venv/bin/python src/menubar.py
 ```
 
-![Menu bar demo](demo.gif)
+![Menu bar demo](assets/demo.gif)
 
 The menu bar icon shows the current state:
 
@@ -65,4 +65,4 @@ The menu bar app starts automatically at login via a LaunchAgent.
 
 ## Configuration
 
-Edit `LOCATION_CITY` and `LOCATION_COUNTRY` in `main.py` to change the location.
+Edit `LOCATION_CITY` and `LOCATION_COUNTRY` in `src/main.py` to change the location.
