@@ -4,9 +4,8 @@ import os
 from datetime import datetime, timedelta
 
 # --- CONFIGURATION ---
-# IMPORTANT: Use environment variables in a real application for security.
-SLACK_OAUTH_TOKEN = "xoxp-YOUR-SLACK-OAUTH-TOKEN"  # Paste your token here
-OPENWEATHER_API_KEY = "YOUR-OPENWEATHER-API-KEY" # Paste your API key here
+SLACK_OAUTH_TOKEN = os.environ["SLACK_API_TOKEN_WEATHER"]
+OPENWEATHER_API_KEY = os.environ["OPENWEATHER_API_KEY"]
 LOCATION_CITY = "Stuttgart"
 LOCATION_COUNTRY = "DE"
 UNITS = "metric"  # Use "imperial" for Fahrenheit
